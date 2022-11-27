@@ -53,6 +53,8 @@ class mod_customform_view_form extends moodleform {
         $handler->set_parent_context($modcontext);
         $handler->instance_form_definition_for_category($mform, $cm->id, $category);
 
+        $mform->addElement('hidden', 'sesskey', sesskey());
+        $mform->setType('sesskey', PARAM_ALPHANUM); // I think
 
         $mform->addElement('hidden', 'cmid', $cm->id);
         $mform->setType('cmid', PARAM_INT);
