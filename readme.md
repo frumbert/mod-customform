@@ -7,12 +7,6 @@ When the user submits the page, it collects the form data and posts it to a the 
 
 **No data** is recorded in the Moodle database (the value(s) that your users enter will not get stored into the customfield_data table.)
 
-## Requirements
-
-Relies on moodle's custom fields
-
-Expose them to activities using https://moodle.org/plugins/local_modcustomfields 
-
 ## Set up
 
 1. A site admin needs to set up the custom fields. This is under Site Administration > Plugins > Activity Modules > Customfields for CustomForm activity.

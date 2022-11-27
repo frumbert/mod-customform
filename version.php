@@ -27,7 +27,4 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version   = 2022112601;       // The current module version (Date: YYYYMMDDXX).
 $plugin->requires  = 2021051100;    // Requires this Moodle version.
 $plugin->component = 'mod_customform';       // Full name of the plugin (used for diagnostics)
-$plugin->dependencies = array(
-    'local_modcustomfields' => 2022021700
-);
 $plugin->cron      = 0;
