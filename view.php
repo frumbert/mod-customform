@@ -47,7 +47,7 @@ $context = context_module::instance($cm->id);
 require_capability('mod/customform:view', $context);
 
 // Completion and trigger events.
-page_view($customform, $course, $cm, $context);
+customform_view($customform, $course, $cm, $context);
 
 $PAGE->set_url('/mod/customform/view.php', array('id' => $cm->id));
 
