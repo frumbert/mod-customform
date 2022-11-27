@@ -83,7 +83,7 @@ $viewform = new mod_customform_view_form(null, $args);
 // ($viewform->is_cancelled())
 if ($data = $viewform->get_data()) {
 
-    $data['sesskey'] = sesskey(); // get_data just removed it, but we want it
+    $data->sesskey = sesskey(); // get_data just removed it, but we want it
     $submitted = customform_submit_data($customform->url, $data);
 
     $feedback = file_rewrite_pluginfile_urls($customform->feedback, 'pluginfile.php', $context->id, 'mod_customform', 'feedback', 0);
