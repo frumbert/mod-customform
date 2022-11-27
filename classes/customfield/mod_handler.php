@@ -305,6 +305,7 @@ class mod_handler extends \core_customfield\handler {
 
         $field = $data->get_field();
         $config = $field->get('configdata');
+        if (!array_key_exists('defaultvalue', $config)) return;
         $default = $config['defaultvalue'];
 
         $value = str_replace($find,$replace,$default, $count);
