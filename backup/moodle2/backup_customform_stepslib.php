@@ -54,7 +54,6 @@ class backup_customform_activity_structure_step extends backup_activity_structur
 
         // Define file annotations
         $page->annotate_files('mod_customform', 'intro', null); // This file areas haven't itemid
-        $page->annotate_files('mod_customform', 'content', null); // This file areas haven't itemid
 
         // Return the root element (page), wrapped into standard activity structure
         return $this->prepare_activity_structure($page);

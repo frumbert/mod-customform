@@ -59,6 +59,5 @@ class restore_customform_activity_structure_step extends restore_activity_struct
     protected function after_execute() {
         // Add page related files, no need to match by itemname (just internally handled context)
         $this->add_related_files('mod_customform', 'intro', null);
-        $this->add_related_files('mod_customform', 'content', null);
     }
 }
