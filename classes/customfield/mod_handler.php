@@ -279,10 +279,11 @@ class mod_handler extends \core_customfield\handler {
         }
     }
 
-    // if a default value of a form element 
+    // match these form default values at RUNTIME to replace with live data (pre-populate form fields)
     private function replace_default_values(&$mform, $data) {
     global $USER, $COURSE, $CFG;
         $find = [
+            'VALUE:USER:USERNAME',
             'VALUE:USER:FIRSTNAME',
             'VALUE:USER:LASTNAME',
             'VALUE:USER:EMAIL',
@@ -293,6 +294,7 @@ class mod_handler extends \core_customfield\handler {
             'VALUE:SITE:WWWROOT',
         ];
         $replace = [
+            $USER->username,
             $USER->firstname,
             $USER->lastname,
             $USER->email,
