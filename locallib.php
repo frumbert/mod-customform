@@ -113,6 +113,8 @@ global $COURSE;
         $emailfrom = core_user::get_noreply_user();
         $emailto = core_user::get_support_user();
         if (!empty($pluginconfig->emailto)) {
+            $emailto->firstname = '';
+            $emailto->lastname = '';
             $emailto->email = $pluginconfig->emailto;
         }
         email_to_user($emailto, $emailfrom,
