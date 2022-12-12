@@ -145,7 +145,7 @@ function customform_submit_data($url, $data) {
     // $data_string = json_encode($data, JSON_NUMERIC_CHECK);
     $data_string = customform_normalise_formdata($data);
 
-    if (empty($url)) return;
+    if (empty($url) || $url === '/') return;
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_POST, 1);
