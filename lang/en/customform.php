@@ -37,11 +37,14 @@ $string['feedback'] = 'Feedback';
 $string['category'] = 'Customfield Category';
 $string['url'] = 'Post to url';
 
+$string['emailto'] = 'Email to:';
+$string['sendemail'] = 'Send form as email:';
+
 $string['form:addinstance'] = 'Add a new form resource';
 $string['form:view'] = 'View form content';
 
 $string['pluginname'] = 'Custom Form';
 $string['privacy:metadata'] = 'The Form resource plugin does not store any personal data.';
 
-$string['customfields'] = 'Customfields for CustomForm activity';
+$string['customfields'] = 'Custom Form - Define Fields';
 

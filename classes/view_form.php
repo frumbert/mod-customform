@@ -35,6 +35,8 @@ require_once($CFG->libdir.'/formslib.php');
  */
 class mod_customform_view_form extends moodleform {
 
+    private $category = 0;
+
    /**
      * Form definition
      *
@@ -46,12 +48,12 @@ class mod_customform_view_form extends moodleform {
         $cm = $this->_customdata['cm'];
         $customform = $this->_customdata['customform'];
         $modcontext = $this->_customdata['modcontext'];
-        $category = $customform->category; // the category inside the form definition to display
+        $this->category = $customform->category; // the category inside the form definition to display
 
         // Add custom fields to the form.
         $handler = mod_customform\customfield\mod_handler::create();
         $handler->set_parent_context($modcontext);
-        $handler->instance_form_definition_for_category($mform, $cm->id, $category);
+        $handler->instance_form_definition_for_category($mform, $cm->id, $this->category);
 
         $mform->addElement('hidden', 'cmid', $cm->id);
         $mform->setType('cmid', PARAM_INT);
@@ -92,7 +94,7 @@ class mod_customform_view_form extends moodleform {
 
         // Add the custom fields validation.
         $handler = mod_customform\customfield\mod_handler::create();
-        $errors  = array_merge($errors, $handler->instance_form_validation($data, $files));
+        $errors  = array_merge($errors, $handler->instance_form_validation($data, $files, $this->category));
 
         return $errors;
     }

@@ -1,4 +1,4 @@
-<?php
+w<?php
 
 // This file is part of Moodle - http://moodle.org/
 //
@@ -52,7 +52,7 @@ customform_view($customform, $course, $cm, $context);
 $PAGE->set_url('/mod/customform/view.php', array('id' => $cm->id));
 
 $PAGE->set_title($course->shortname.': '.$customform->name);
-$PAGE->set_heading($customform->name);
+$PAGE->set_heading($course->fullname); //$customform->name);
 $PAGE->set_activity_record($customform);
 
 echo $OUTPUT->header();
@@ -86,14 +86,16 @@ if ($data = $viewform->get_data()) {
     $data->sesskey = sesskey(); // get_data just removed it, but we want it
     $submitted = customform_submit_data($customform->url, $data);
 
+    send_data_as_email($cm, $customform, $data);
+
     $feedback = file_rewrite_pluginfile_urls($customform->feedback, 'pluginfile.php', $context->id, 'mod_customform', 'feedback', 0);
     $formatoptions = new stdClass;
-    $formatoptions->noclean = true;
-    $formatoptions->overflowdiv = true;
-    $formatoptions->context = $context;
+    // $formatoptions->noclean = true;
+    // $formatoptions->overflowdiv = true;
+    // $formatoptions->context = $context;
     $feedback = format_text($feedback, $customform->feedbackformat, $formatoptions);
 
-    if ($feedback && $submitted) {
+    if ($feedback) { // } && $submitted) {
         echo $OUTPUT->box($feedback, "generalbox customfield-feedback");
     }
 

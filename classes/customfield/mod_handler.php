@@ -318,4 +318,35 @@ class mod_handler extends \core_customfield\handler {
         }
     }
 
+    /**
+     * Validates the given data for custom fields, used in moodleform validation() function
+     * Category is required to limit validation to just the selected category for this form instance
+     * validation is initiated from $mform->get_data()
+     *
+     * Example:
+     *   public function validation($data, $files, $category) {
+     *     $errors = [];
+     *     // .... check other fields.
+     *     $errors = array_merge($errors, $handler->instance_form_validation($data, $files));
+     *     return $errors;
+     *   }
+     *
+     * @param array $data
+     * @param array $files
+     * @param int $category - the selected category for this form display
+     * @return array validation errors
+     */
+    public function instance_form_validation(array $data, array $files, $category = 0) {
+        $instanceid = empty($data['id']) ? 0 : $data['id'];
+        $editablefields = $this->get_editable_fields($instanceid);
+        $fields = api::get_instance_fields_data($editablefields, $instanceid);
+        $errors = [];
+        foreach ($fields as $formfield) {
+            if ($category > 0 && $category == $formfield->get_field()->get_category()->get('id')) {
+                $errors += $formfield->instance_form_validation($data, $files);
+            }
+        }
+        return $errors;
+    }
+
 }
