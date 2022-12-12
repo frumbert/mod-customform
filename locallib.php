@@ -82,6 +82,7 @@ global $COURSE;
             switch ($field->get('type')) {
                 case "select":
                     $options = explode("\r\n",$config['options']);
+                    array_unshift($options,''); // account for empty at beginning
                     $value = $options[$formdata[$field->get('shortname')]];
                     break;
 
