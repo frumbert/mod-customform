@@ -23,12 +23,13 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core_customfield\api;
+
 defined('MOODLE_INTERNAL') || die;
 
 require_once("$CFG->libdir/filelib.php");
 require_once("$CFG->libdir/resourcelib.php");
 require_once("$CFG->dirroot/mod/page/lib.php");
-
 
 /**
  * File browsing support class
@@ -61,22 +62,100 @@ function customform_get_editor_options($context) {
     );
 }
 
+function send_data_as_email($cm, $customform, $data) {
+global $COURSE;
+
+    $pluginconfig = get_config('customform');
+
+    // convert MFORM post fields into HTML
+    $output = [];
+    $handler = mod_customform\customfield\mod_handler::create();
+    $editablefields = $handler->get_editable_fields($cm->id);
+    $fieldswithdata = api::get_instance_fields_data($editablefields, $cm->id);
+    $formdata = customform_normalise_formdata($data);
+    foreach ($fieldswithdata as $row) {
+        $field = $row->get_field();
+        $value = "";
+        if ($customform->category == $field->get_category()->get('id')) {
+            $label = $field->get('name');
+            $config = $field->get('configdata');
+            switch ($field->get('type')) {
+                case "select":
+                    $options = explode("\r\n",$config['options']);
+                    $value = $options[$formdata[$field->get('shortname')]];
+                    break;
+
+                case "multiselect":
+                    $options = explode("\r\n",$config['options']);
+                    $values = [];
+                    foreach ($formdata[$field->get('shortname')] as $item) {
+                        $values[] = $options[$item];
+                    }
+                    $value = implode(', ', $values);
+                    break;
+
+                case "checkbox":
+                    $value = ($formdata[$field->get('shortname')] == 0) ? get_string('no') : get_string('yes');
+                    break;
+
+                default: 
+                    $value = $formdata[$field->get('shortname')];
+            }
+            $output[] = "<p><strong>{$label}</strong>: {$value}</p>";
+        }
+    }
+
+    if ($pluginconfig->sendemail == '1') {
+        $messagehtml = implode(PHP_EOL, $output);
+        $messagetext = html_to_text($messagehtml);
+        $subject = "Contact Form ({$COURSE->fullname})";
+
+        $emailfrom = core_user::get_noreply_user();
+        $emailto = core_user::get_support_user();
+        if (!empty($pluginconfig->emailto)) {
+            $emailto->email = $pluginconfig->emailto;
+        }
+        email_to_user($emailto, $emailfrom,
+                    $subject,
+                    $messagetext, $messagehtml);
+    }
+}
+
+function customform_normalise_formdata($data) {
+    $pairs = [];
+    foreach ((array)$data as $key => $value) {
+        $k = str_replace('customfield_','',$key,$count);
+        $v = $value;
+        if (strpos($k,"_editor")!==false) {
+            $k = str_replace('_editor','',$k);
+            $v = $value['text'];
+        }
+        $pairs[$k] = $v;
+    }
+    return $pairs;
+}
+
+
+
 function customform_submit_data($url, $data) {
 
-    $data_string = json_encode($data, JSON_NUMERIC_CHECK);
+    // $data_string = json_encode($data, JSON_NUMERIC_CHECK);
+    $data_string = customform_normalise_formdata($data);
+
+    if (empty($url)) return;
 
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string); // $entityBody = file_get_contents('php://input');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-        'Content-Type: application/json',
-        'Content-Length: ' . strlen($data_string))
-    );
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data_string)); // $entityBody = file_get_contents('php://input');
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    //     'Content-Type: multipart/form-data',
+    //     //'Content-Length: ' . strlen($data_string))
+    // ));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, false); // not listening or recording result
     curl_setopt($ch, CURLOPT_VERBOSE, false);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
-
     curl_exec($ch);
+
     return true;
 
 }

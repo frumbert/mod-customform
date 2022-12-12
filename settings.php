@@ -26,6 +26,16 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) { // Needs this condition or there is error on login page.
+
+    $options = array(0=>get_string('no'), 1=>get_string('yes'));
+    $settings->add(new admin_setting_configselect('customform/sendemail',
+                    get_string('sendemail', 'mod_customform'),
+                    '', 0, $options));
+
+    $settings->add(new admin_setting_configtext('customform/emailto',
+                       get_string('emailto', 'mod_customform'),
+                       '', '', PARAM_EMAIL));
+
     $ADMIN->add('modsettings',
         new admin_externalpage('mod_customform', new lang_string('customfields', 'mod_customform'),
             $CFG->wwwroot . '/mod/customform/customfield.php',
