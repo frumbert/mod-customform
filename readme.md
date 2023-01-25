@@ -30,6 +30,7 @@ You can add these tokenisers as default values to your custom form fields. At ru
 * `VALUE:COURSE:FULLNAME` - Course long name
 * `VALUE:COURSE:SHORTNAME` - Course short name
 * `VALUE:SITE:WWWROOT` - URL of site
+* `VALUE:PREF:pref-name` - Returns user preference value named `pref-name` for the current user
 
 ## TODO
 

@@ -57,6 +57,9 @@ class mod_customform_mod_form extends moodleform_mod {
         $mform->addRule('url', null, 'required', null, 'client');
         $mform->addRule('url', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
 
+        $mform->addElement('textarea', 'footer', get_string('footer', 'customform'), array('rows' => 5, 'cols' => 80));
+        $mform->setType('footer', PARAM_RAW);
+
         $handler = mod_customform\customfield\mod_handler::create();
         $categories = $handler->get_categories_with_fields();
         $options = [];
@@ -98,6 +101,7 @@ class mod_customform_mod_form extends moodleform_mod {
                                                         customform_get_editor_options($this->context),
                                                         $defaultvalues['feedback']);
             $defaultvalues['customform']['itemid'] = $draftitemid;
+
         }
 
 

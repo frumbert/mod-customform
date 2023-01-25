@@ -76,7 +76,8 @@ $submitted = false;
 $args = array(
     'cm' => $cm,
     'customform' => $customform,
-    'modcontext' => $context
+    'modcontext' => $context,
+    // 'footer' => $customform->footer
 );
 $viewform = new mod_customform_view_form(null, $args);
 
@@ -102,6 +103,7 @@ if ($data = $viewform->get_data()) {
 } else {
 
     $viewform->display();
+    echo $customform->footer;
 
 }
 

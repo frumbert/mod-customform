@@ -61,6 +61,8 @@ class mod_customform_view_form extends moodleform {
 
         $mform->addElement('submit', 'submitbutton', get_string('submit'));
 
+        $mform->addElement('html', $this->_customdata['footer']);
+
         // We don't store/populate instance data: Let the form just be its default build
         // $handler->instance_form_before_set_data($customform);
         // $this->set_data($customform);

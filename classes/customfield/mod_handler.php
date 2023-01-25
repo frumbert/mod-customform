@@ -281,7 +281,7 @@ class mod_handler extends \core_customfield\handler {
 
     // match these form default values at RUNTIME to replace with live data (pre-populate form fields)
     private function replace_default_values(&$mform, $data) {
-    global $USER, $COURSE, $CFG;
+    global $USER, $COURSE, $CFG, $DB;
         $find = [
             'VALUE:USER:USERNAME',
             'VALUE:USER:FIRSTNAME',
@@ -311,6 +311,15 @@ class mod_handler extends \core_customfield\handler {
         $default = $config['defaultvalue'];
 
         $value = str_replace($find,$replace,$default, $count);
+
+        if ($count === 0 && strpos($default, 'VALUE:PREF:')!==false) {
+            list(,,$prefname) = explode(':',$default);
+            $value = ''; // clear out the pref-name even if it's not found
+            if ($record = $DB->get_record('user_preferences',['userid'=>$USER->id,'name'=>$prefname])) {
+                $value = $record->value;
+            }
+            $count = 1;
+        }
 
         if ($count > 0) {
             $elementname = $data->get_form_element_name();
