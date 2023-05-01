@@ -59,7 +59,7 @@ class backup_customform_activity_task extends backup_activity_task {
 
         // Link to page view by moduleid
         $search="/(".$base."\/mod\/customform\/view.php\?id\=)([0-9]+)/";
-        $content= preg_replace($search, '$@PAGEVIEWBYID*$2@$', $content);
+        $content= preg_replace($search, '$@CUSTOMFORMVIEWBYID*$2@$', $content);
 
         return $content;
     }
